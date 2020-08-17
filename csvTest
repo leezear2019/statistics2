@@ -1,0 +1,6 @@
+import pandas as pd
+
+if __name__ == '__main__':
+    sample = R"D:\exp\default\AllInterval_DEFAULT_2020-08-07_21_03_27.csv"
+    data = pd.read_csv(sample)
+    print(data.columns)
