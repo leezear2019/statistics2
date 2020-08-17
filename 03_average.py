@@ -59,7 +59,7 @@ if __name__ == '__main__':
                     l.append(data[t][0])
                 elif 'ime' in t:
                     c1 = data[t] >= 900
-                    c=data[t] >= 0
+                    c = data[t] >= 0
                     s = data[t].mean()
                     # s = data[t].size
                     # l.append(sum(c))
@@ -84,9 +84,9 @@ if __name__ == '__main__':
 
     nd = np.array(ls)
     print(nd.shape)
-    result = pd.DataFrame(nd,columns=title_list)
+    result = pd.DataFrame(nd, columns=title_list)
     print(result)
-    result.to_csv(resfile,index=0)
+    result.to_csv(resfile, index=0)
     # print(data)
     #
     # for c in solve_time_list:
