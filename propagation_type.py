@@ -14,6 +14,7 @@ def printme(root_dir, res_dir):
         res_path = os.path.join(res_dir, name)
         print(path)
         data = pd.read_csv(path)
+        data = data.dropna(axis=0, how='any')
         data = data.loc[:, list(data.columns)[53:79]]
         print(data)
         data.to_csv(res_path, index=0)
@@ -28,12 +29,11 @@ def removeTimeOut(root_dir, res_dir, time_limit, solve_time_list):
         res_path = os.path.join(res_dir, name)
         print(path)
         data = pd.read_csv(path)
-
+        data = data.dropna(axis=0, how='any')
         c1 = data[solve_time_list[0]] >= time_limit
         c2 = data[solve_time_list[1]] >= time_limit
 
         data.drop(data[c1 | c2].index, inplace=True)
-
         print(name, data.shape)
         data.to_csv(res_path, index=0)
 
@@ -102,6 +102,7 @@ def phase_mean(root_dir, res_dir, heu_name):
     # print(result)
     # y = len(nd.shape[0])
     x = np.arange(nd.shape[1])
+    f = plt.figure(figsize=(5, 2.5))
     plt.bar(x, nd[0], width=0.5, label=title_list[0])
     nds = nd[0]
 
@@ -114,10 +115,11 @@ def phase_mean(root_dir, res_dir, heu_name):
     # plt.bar(x, nd[1], bottom=nd[0], width=0.5, label='b')
     # plt.bar(x, nd[1], bottom=nd[0:1], width=0.5, label='c')
     plt.ylim(0, 1)
-    plt.rcParams['font.sans-serif']=['Times New Roman']
-    plt.xticks(range(nd.shape[1]), names)
-    plt.xlabel('Series')
-    plt.legend()
+    plt.rcParams['font.sans-serif'] = ['Times New Roman']
+    plt.xticks(range(nd.shape[1]), names, rotation=45, fontsize=8,horizontalalignment='right')
+    # plt.xlabel('Series')
+    legend = ['None', 'Skip', 'P1', 'P1 And P2', 'P2']
+    plt.legend(legend, ncol=5, loc='lower right', fontsize=8)
     plt.grid(True)
     plt.show()
 
@@ -129,40 +131,40 @@ if __name__ == '__main__':
     res_dir = 'D:/exp/per'
     root_dir = os.path.join(root_dir, heu_name)
     res_dir = os.path.join(res_dir, heu_name)
-    # time_limit = 900
-    #
-    # printme(root_dir, res_dir)
-    #
-    # #p2
-    # solve_time_list = list()
-    # sample = "D:\exp\per\def\AllInterval_DEFAULT_2020-08-07_21_03_27.csv"
-    #
-    # data = pd.read_csv(sample)
-    # title_list = data.columns.values.tolist()
-    # print(title_list)
-    # print(len(title_list))
-    # #
-    # result = pd.DataFrame(columns=title_list)
-    # # solve time list
-    # for c in title_list:
-    #     if c.startswith('time'):
-    #         solve_time_list.append(c)
-    #
-    # print(solve_time_list)
-    #
-    # removeTimeOut(root_dir, res_dir, time_limit, solve_time_list)
+    time_limit = 900
 
-    # # p3
-    # # root_dir = R"D:\exp\per\def"
-    # # res_dir = R"D:\exp\5p\def"
-    # root_dir = 'D:/exp/per'
-    # res_dir = 'D:/exp/5p'
-    # root_dir = os.path.join(root_dir, heu_name)
-    # res_dir = os.path.join(res_dir, heu_name)
-    # # 去掉不用的列
-    # reduce_table(root_dir, res_dir)
-    # # # 算百分比
-    # # calculate_percentage(root_dir, res_dir)
+    printme(root_dir, res_dir)
+
+    # p2
+    solve_time_list = list()
+    sample = "D:\exp\per\def\AllInterval_DEFAULT_2020-08-07_21_03_27.csv"
+
+    data = pd.read_csv(sample)
+    title_list = data.columns.values.tolist()
+    print(title_list)
+    print(len(title_list))
+    #
+    result = pd.DataFrame(columns=title_list)
+    # solve time list
+    for c in title_list:
+        if c.startswith('time'):
+            solve_time_list.append(c)
+
+    print(solve_time_list)
+
+    removeTimeOut(root_dir, res_dir, time_limit, solve_time_list)
+
+    # p3
+    # root_dir = R"D:\exp\per\def"
+    # res_dir = R"D:\exp\5p\def"
+    root_dir = 'D:/exp/per'
+    res_dir = 'D:/exp/5p'
+    root_dir = os.path.join(root_dir, heu_name)
+    res_dir = os.path.join(res_dir, heu_name)
+    # 去掉不用的列
+    reduce_table(root_dir, res_dir)
+    # # 算百分比
+    # calculate_percentage(root_dir, res_dir)
 
     root_dir = 'D:/exp/5p'
     res_dir = 'D:/exp/5p'
