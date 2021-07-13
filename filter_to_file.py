@@ -21,7 +21,6 @@ def sub_data(solve_time_str, filter_time_str, algos, min_time, max_time, data):
     # print(data.shape)
     data = data[filter_time_str]
     data.columns = algos
-    # print(data)
     return data
 
     # c1 = data[new_title[0]] < min_time
@@ -104,7 +103,7 @@ if __name__ == '__main__':
     filterTime_list = ['filterTime', 'filterTime.1', 'filterTime.2', 'filterTime.3', 'filterTime.4', 'filterTime.5',
                        'filterTime.6', 'filterTime.7']
     # 新标题列
-    new_title = ['Choco', 'Regin', 'Zhang18', 'OurM', 'Zhang20', 'OurMB', 'WordRam','LO']
+    new_title = ['Choco', 'Regin', 'Zhang18', 'OurM', 'Zhang20', 'OurMB', 'LO', 'WordRam']
     # print(solve_time_list)
     # print(new_title)
 
@@ -115,8 +114,6 @@ if __name__ == '__main__':
         path = os.path.join(root_dir, name)
         # 实例名字
         data = pd.read_csv(path)
-        print(path)
-        # print(data)
         # 删nan的行
         data = data.dropna(axis=0, how='any')
         # 加入summary_data
@@ -149,59 +146,9 @@ if __name__ == '__main__':
     #     for j in range(2):
     #         draw_fig(i, j, ts[i], fig, spec,anno_opts, axs, ds[i])
 
-    f, ax = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(6.5, 6.5))
-    plt.rcParams['font.sans-serif'] = ['Times New Roman']
-    f.subplots_adjust()
-    plt.ylim(0.001, 600)
-    plt.xlim(0.001, 600)
-    plt.xscale('log', base=10)
-    plt.yscale('log', base=10)
-
-    for i in range(2):
-        for j in range(2):
-            idx = i * 2 + j
-            algo = ts[idx]
-            ax[i][j].scatter(ds[idx][algo[0]], ds[idx][algo[1]], s=0.25)
-            ax[i][j].set_xlabel(algo[0])
-            ax[i][j].set_ylabel(algo[1])
-            # ax[i][j].set_xlim(0,60000)
-            # ax[i][j].set_ylim(0,60000)
-            # add_identity(ax[i][j], color='g', ls='--')
-            # add_identity(ax[i][j], color='g', ls='--')
-            ax[i][j].plot(ax[i][j].get_xlim(), ax[i][j].get_ylim(), color='g', ls='--')
-            # diag_line, = ax[i][j].plot(ax[i][j].get_xlim(), ax[i][j].get_ylim(), ls="--", c=".3")
-
-    # plt.loglog()
-    # plt.xlim(min_time / 10, time_limit)
-    plt.tight_layout()
-    # plt.subplots_adjust(wspace=0)
-    # f.title('Average No Of Independent Candidates by Constituency Type')
-
-    plt.show()
-
-    # f = plt.figure()
-
-    # print(summary_data)
-    # for i in range(len(x_list)):
-    #     sub_fig(i, axs, time_limit, min_time, heus[0], heus_names[0], algos[i], y)
-
-    # sub_fig(heus[0], f, ax[0][0], time_limit, min_time, heus_names[0])
-    # sub_fig(heus[1], f, ax[0][1], time_limit, min_time, heus_names[1])
-    # sub_fig(heus[2], f, ax[1][0], time_limit, min_time, heus_names[2])
-
-    # plt.legend()
-    # f.legend(new_title, bbox_to_anchor=(0.95, 0.9), ncol=5, fontsize=10.5)
-    # plt.legend(fontsize=10)
-    # plt.figlegend(loc = 'upper center', ncol=5 )
-    # f.legend(new_title, loc = 'lower center', ncol=5)
-    # f.legend(bbox_to_anchor=(1.05, 0), loc='lower left', borderaxespad=0.)
-    # f.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-    # ncol=2, mode="expand", borderaxespad=0.)
-    # f.tight_layout()
-    # plt.legend()
-    # plt.semilogx()
-    # plt.ylim(0, 230)
-    # plt.xlim(min_time / 10, time_limit)
-    # plt.tight_layout()
-    # # f.title('Average No Of Independent Candidates by Constituency Type')
-    # plt.show()
+    for i in range(4):
+        summary_data = pd.DataFrame(ds[i], columns=new_title)
+        # summary_data.to_csv()
+        s = "D:\\exp\\"+ str(i)+".csv"
+        print(s)
+        summary_data.to_csv(s, index=0)

@@ -21,7 +21,6 @@ def sub_data(solve_time_str, filter_time_str, algos, min_time, max_time, data):
     # print(data.shape)
     data = data[filter_time_str]
     data.columns = algos
-    # print(data)
     return data
 
     # c1 = data[new_title[0]] < min_time
@@ -75,8 +74,8 @@ if __name__ == '__main__':
     # res_dir = 'D:/data2/sum_rm'
     heu_name = 'def'
     max_time = 899.9
-    min_time = 0.001
-    algos = ['Regin', 'Zhang18', 'Zhang20', 'WordRam', 'OurMB']
+    min_time = 0.01
+    algos = ['Fair', 'Zhang18', 'Zhang20', 'WordRam', 'OurMB']
     # f.figure(figsize=(4, 4))    # f.figure(figsize=(4, 4))
     # f.rcParams['font.sans-serif'] = ['Times New Roman']
     heus = ['def', 'abs', 'ibs']
@@ -87,7 +86,7 @@ if __name__ == '__main__':
     plt.rcParams['font.sans-serif'] = ['Times New Roman']
     # f.subplots_adjust(wspace=1)
     y = 'OurMB'
-    x_list = ['Zhang18', 'Zhang20', 'OurM', 'WordRam']
+    x_list = ['Fair', 'Zhang18', 'Zhang20', 'WordRam']
     i = 0
     # f = plt.subplot(221)
 
@@ -104,7 +103,7 @@ if __name__ == '__main__':
     filterTime_list = ['filterTime', 'filterTime.1', 'filterTime.2', 'filterTime.3', 'filterTime.4', 'filterTime.5',
                        'filterTime.6', 'filterTime.7']
     # 新标题列
-    new_title = ['Choco', 'Regin', 'Zhang18', 'OurM', 'Zhang20', 'OurMB', 'WordRam','LO']
+    new_title = ['Choco', 'Fair', 'Zhang18', 'OurM', 'Zhang20', 'OurMB', 'LO', 'WordRam']
     # print(solve_time_list)
     # print(new_title)
 
@@ -115,8 +114,6 @@ if __name__ == '__main__':
         path = os.path.join(root_dir, name)
         # 实例名字
         data = pd.read_csv(path)
-        print(path)
-        # print(data)
         # 删nan的行
         data = data.dropna(axis=0, how='any')
         # 加入summary_data
@@ -126,14 +123,14 @@ if __name__ == '__main__':
     # print(summary_data.shape)
     # print(summary_data)
 
-    compare_idx = [1, 2, 7, 4, 5]
+    compare_idx = [2, 7, 5]
     axs = list()
     ds = list()
     ts = list()
     max_filtering_time = 0
-    dest_idx = 4
+    dest_idx = 2
 
-    for i in range(4):
+    for i in range(2):
         algo = [new_title[compare_idx[i]], new_title[compare_idx[dest_idx]]]
         ts.append(algo)
         solve_time_str = [solve_time_list[compare_idx[i]], solve_time_list[compare_idx[dest_idx]]]
@@ -149,27 +146,29 @@ if __name__ == '__main__':
     #     for j in range(2):
     #         draw_fig(i, j, ts[i], fig, spec,anno_opts, axs, ds[i])
 
-    f, ax = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(6.5, 6.5))
+    f, ax = plt.subplots(1, 2, sharex=True, sharey=True, figsize=(8, 4))
     plt.rcParams['font.sans-serif'] = ['Times New Roman']
     f.subplots_adjust()
-    plt.ylim(0.001, 600)
-    plt.xlim(0.001, 600)
+    plt.ylim(0.0001, 600)
+    plt.xlim(0.0001, 600)
     plt.xscale('log', base=10)
     plt.yscale('log', base=10)
 
+    # plt.xticks(rotation = 90)
+
     for i in range(2):
-        for j in range(2):
-            idx = i * 2 + j
-            algo = ts[idx]
-            ax[i][j].scatter(ds[idx][algo[0]], ds[idx][algo[1]], s=0.25)
-            ax[i][j].set_xlabel(algo[0])
-            ax[i][j].set_ylabel(algo[1])
-            # ax[i][j].set_xlim(0,60000)
-            # ax[i][j].set_ylim(0,60000)
-            # add_identity(ax[i][j], color='g', ls='--')
-            # add_identity(ax[i][j], color='g', ls='--')
-            ax[i][j].plot(ax[i][j].get_xlim(), ax[i][j].get_ylim(), color='g', ls='--')
-            # diag_line, = ax[i][j].plot(ax[i][j].get_xlim(), ax[i][j].get_ylim(), ls="--", c=".3")
+        idx = i
+        algo = ts[idx]
+        ax[i].scatter(ds[idx][algo[0]], ds[idx][algo[1]], s=0.25)
+        ax[i].set_xlabel(algo[0])
+        ax[i].set_ylabel(algo[1])
+        # ax[i][j].set_xlim(0,60000)
+        # ax[i][j].set_ylim(0,60000)
+        # add_identity(ax[i][j], color='g', ls='--')
+        # add_identity(ax[i][j], color='g', ls='--')
+        ax[i].plot(ax[i].get_xlim(), ax[i].get_ylim(), color='g', ls='--')
+        # ax[i].tick_params(axis='x', rotation=45)
+        # diag_line, = ax[i][j].plot(ax[i][j].get_xlim(), ax[i][j].get_ylim(), ls="--", c=".3")
 
     # plt.loglog()
     # plt.xlim(min_time / 10, time_limit)

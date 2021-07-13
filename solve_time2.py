@@ -18,9 +18,9 @@ def sub_fig(index, heu_name, time_limit, min_time, h_name, f):
 
     summary_files = sorted(os.listdir(root_dir))
     # 保留列
-    solve_time_list = ['time', 'time.1', 'time.2', 'time.3', 'time.4', 'time.5', 'time.6']
+    solve_time_list = ['time', 'time.1', 'time.2', 'time.3', 'time.4', 'time.5', 'time.6', 'time.7']
     # 新标题列
-    new_title = ['Choco', 'Fair', 'Zhang18', 'OurM', 'Zhang20', 'OurMB', 'LO']
+    new_title = ['Choco', 'Regin', 'Zhang18', 'OurM', 'Zhang20', 'Our', 'LO', 'WordRam']
     print(solve_time_list)
     print(new_title)
     summary_files = sorted(os.listdir(root_dir))
@@ -48,8 +48,9 @@ def sub_fig(index, heu_name, time_limit, min_time, h_name, f):
         c5 = data[new_title[4]] >= time_limit
         c6 = data[new_title[5]] >= time_limit
         c7 = data[new_title[6]] >= time_limit
+        c8 = data[new_title[7]] >= time_limit
         # data.drop(data[c1|c2|c3|c4|c5|c6].index, inplace=True)
-        data.drop(data[c1 & c2 & c3 & c4 & c5 & c6 & c7].index, inplace=True)
+        data.drop(data[c1 & c2 & c3 & c4 & c5 & c6 & c7 & c8].index, inplace=True)
 
         c1 = data[new_title[0]] < min_time
         c2 = data[new_title[1]] < min_time
@@ -58,10 +59,11 @@ def sub_fig(index, heu_name, time_limit, min_time, h_name, f):
         c5 = data[new_title[4]] < min_time
         c6 = data[new_title[5]] < min_time
         c7 = data[new_title[6]] < min_time
+        c8 = data[new_title[7]] < min_time
 
         # print(c1 & c2 & c3 & c4 & c5 & c6 & c7)
         # data.drop(data[c1|c2|c3|c4|c5|c6].index, inplace=True)
-        data.drop(data[c1 & c2 & c3 & c4 & c5 & c6 & c7].index, inplace=True)
+        data.drop(data[c1 & c2 & c3 & c4 & c5 & c6 & c7 & c8].index, inplace=True)
 
         # print(data)
         # print(data.shape)
@@ -84,6 +86,9 @@ def sub_fig(index, heu_name, time_limit, min_time, h_name, f):
 
     # print(summary_data)
 
+    # 保存
+    print('-------------')
+    # data.to_csv(res_path, index=0)
     # 绘图
     print('-------------')
 
@@ -103,7 +108,7 @@ def sub_fig(index, heu_name, time_limit, min_time, h_name, f):
         ax = f.add_subplot(1, 3, index + 1)
         first_ax = ax
     else:
-        ax = f.add_subplot(1, 3, index + 1, sharex = first_ax)
+        ax = f.add_subplot(1, 3, index + 1, sharex=first_ax)
 
     ax.set_title(h_name)
 
@@ -137,9 +142,10 @@ if __name__ == '__main__':
     # root_dir = 'D:/data2/out'
     # res_dir = 'D:/data2/sum_rm'
     heu_name = 'def'
-    time_limit = 899.9
-    min_time = 1
-    new_title = ['Choco', 'Zhang18', 'Zhang20', 'OurMB', 'LO']
+    time_limit = 899.999
+    min_time = 0.001
+    new_title = ['Regin', 'Zhang18', 'Zhang20', 'Our', 'LO', 'WordRam']
+
     # f.figure(figsize=(4, 4))
     # f.rcParams['font.sans-serif'] = ['Times New Roman']
     heus = ['def', 'abs', 'ibs']

@@ -76,7 +76,7 @@ if __name__ == '__main__':
     heu_name = 'def'
     max_time = 899.9
     min_time = 0.001
-    algos = ['Regin', 'Zhang18', 'Zhang20', 'WordRam', 'OurMB']
+    algos = ['Zhang18', 'Zhang20', 'OurM', 'WordRam', 'OurMB']
     # f.figure(figsize=(4, 4))    # f.figure(figsize=(4, 4))
     # f.rcParams['font.sans-serif'] = ['Times New Roman']
     heus = ['def', 'abs', 'ibs']
@@ -99,12 +99,12 @@ if __name__ == '__main__':
 
     files = sorted(os.listdir(root_dir))
     # 求解时间
-    solve_time_list = ['time', 'time.1', 'time.2', 'time.3', 'time.4', 'time.5', 'time.6', 'time.7']
+    solve_time_list = ['time', 'time.1', 'time.2', 'time.3', 'time.4', 'time.5', 'time.6']
     # 过滤时间
     filterTime_list = ['filterTime', 'filterTime.1', 'filterTime.2', 'filterTime.3', 'filterTime.4', 'filterTime.5',
-                       'filterTime.6', 'filterTime.7']
+                       'filterTime.6']
     # 新标题列
-    new_title = ['Choco', 'Regin', 'Zhang18', 'OurM', 'Zhang20', 'OurMB', 'WordRam','LO']
+    new_title = ['Regin', 'Zhang18', 'OurM', 'Zhang20', 'WordRam', 'OurMB', 'LO']
     # print(solve_time_list)
     # print(new_title)
 
@@ -126,7 +126,7 @@ if __name__ == '__main__':
     # print(summary_data.shape)
     # print(summary_data)
 
-    compare_idx = [1, 2, 7, 4, 5]
+    compare_idx = [1, 2, 3, 4, 5]
     axs = list()
     ds = list()
     ts = list()
@@ -135,11 +135,23 @@ if __name__ == '__main__':
 
     for i in range(4):
         algo = [new_title[compare_idx[i]], new_title[compare_idx[dest_idx]]]
+        print(algo)
         ts.append(algo)
         solve_time_str = [solve_time_list[compare_idx[i]], solve_time_list[compare_idx[dest_idx]]]
         filter_time_str = [filterTime_list[compare_idx[i]], filterTime_list[compare_idx[dest_idx]]]
         ds.append(sub_data(solve_time_str, filter_time_str, algo, min_time, max_time, summary_data))
 
+    # 保存
+    for i in range(4):
+        summary_data = pd.DataFrame(ds[i], columns=new_title)
+        # summary_data.to_csv()
+        s = "D:\\exp\\data-" + str(i) + ".csv"
+        print(s)
+
+        summary_data = summary_data.dropna(axis = 1)
+
+        # print(summary_data)
+        summary_data.to_csv(s, index=0)
     # 绘图
     # fig = plt.figure( figsize=(6.2, 6)   )
     # spec = fig.add_gridspec(ncols=2, nrows=2)
@@ -148,36 +160,36 @@ if __name__ == '__main__':
     # for i in range(2):
     #     for j in range(2):
     #         draw_fig(i, j, ts[i], fig, spec,anno_opts, axs, ds[i])
-
-    f, ax = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(6.5, 6.5))
-    plt.rcParams['font.sans-serif'] = ['Times New Roman']
-    f.subplots_adjust()
-    plt.ylim(0.001, 600)
-    plt.xlim(0.001, 600)
-    plt.xscale('log', base=10)
-    plt.yscale('log', base=10)
-
-    for i in range(2):
-        for j in range(2):
-            idx = i * 2 + j
-            algo = ts[idx]
-            ax[i][j].scatter(ds[idx][algo[0]], ds[idx][algo[1]], s=0.25)
-            ax[i][j].set_xlabel(algo[0])
-            ax[i][j].set_ylabel(algo[1])
-            # ax[i][j].set_xlim(0,60000)
-            # ax[i][j].set_ylim(0,60000)
-            # add_identity(ax[i][j], color='g', ls='--')
-            # add_identity(ax[i][j], color='g', ls='--')
-            ax[i][j].plot(ax[i][j].get_xlim(), ax[i][j].get_ylim(), color='g', ls='--')
-            # diag_line, = ax[i][j].plot(ax[i][j].get_xlim(), ax[i][j].get_ylim(), ls="--", c=".3")
-
-    # plt.loglog()
-    # plt.xlim(min_time / 10, time_limit)
-    plt.tight_layout()
-    # plt.subplots_adjust(wspace=0)
-    # f.title('Average No Of Independent Candidates by Constituency Type')
-
-    plt.show()
+    #
+    # f, ax = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(6.5, 6.5))
+    # plt.rcParams['font.sans-serif'] = ['Times New Roman']
+    # f.subplots_adjust()
+    # plt.ylim(0.001, 600)
+    # plt.xlim(0.001, 600)
+    # plt.xscale('log', base=10)
+    # plt.yscale('log', base=10)
+    #
+    # for i in range(2):
+    #     for j in range(2):
+    #         idx = i * 2 + j
+    #         algo = ts[idx]
+    #         ax[i][j].scatter(ds[idx][algo[0]], ds[idx][algo[1]], s=0.25)
+    #         ax[i][j].set_xlabel(algo[0])
+    #         ax[i][j].set_ylabel(algo[1])
+    #         # ax[i][j].set_xlim(0,60000)
+    #         # ax[i][j].set_ylim(0,60000)
+    #         # add_identity(ax[i][j], color='g', ls='--')
+    #         # add_identity(ax[i][j], color='g', ls='--')
+    #         ax[i][j].plot(ax[i][j].get_xlim(), ax[i][j].get_ylim(), color='g', ls='--')
+    #         # diag_line, = ax[i][j].plot(ax[i][j].get_xlim(), ax[i][j].get_ylim(), ls="--", c=".3")
+    #
+    # # plt.loglog()
+    # # plt.xlim(min_time / 10, time_limit)
+    # plt.tight_layout()
+    # # plt.subplots_adjust(wspace=0)
+    # # f.title('Average No Of Independent Candidates by Constituency Type')
+    #
+    # plt.show()
 
     # f = plt.figure()
 
