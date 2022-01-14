@@ -31,9 +31,9 @@ def removeTimeOut(root_dir, res_dir, time_limit, solve_time_list):
         data = pd.read_csv(path)
         data = data.dropna(axis=0, how='any')
         c1 = data[solve_time_list[0]] >= time_limit
-        c2 = data[solve_time_list[1]] >= time_limit
+        # c2 = data[solve_time_list[1]] >= time_limit
 
-        data.drop(data[c1 | c2].index, inplace=True)
+        data.drop(data[c1].index, inplace=True)
         print(name, data.shape)
         data.to_csv(res_path, index=0)
 
@@ -47,6 +47,7 @@ def reduce_table(root_dir, res_dir):
         # print(path)
         data = pd.read_csv(path)
 
+        data = data['numProp.6', 'numNone.6', 'numSkip.6', 'numP1.6', 'numP2.6', 'numP1AndP2.6']
         # 删除无用列
         d = data.drop(data.columns[[0, 1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]], axis=1)
         # 重命名列
@@ -116,7 +117,7 @@ def phase_mean(root_dir, res_dir, heu_name):
     # plt.bar(x, nd[1], bottom=nd[0:1], width=0.5, label='c')
     plt.ylim(0, 1)
     plt.rcParams['font.sans-serif'] = ['Times New Roman']
-    plt.xticks(range(nd.shape[1]), names, rotation=45, fontsize=8,horizontalalignment='right')
+    plt.xticks(range(nd.shape[1]), names, rotation=45, fontsize=8, horizontalalignment='right')
     # plt.xlabel('Series')
     legend = ['None', 'Skip', 'P1', 'P1 And P2', 'P2']
     plt.legend(legend, ncol=5, loc='lower right', fontsize=8)
@@ -125,49 +126,72 @@ def phase_mean(root_dir, res_dir, heu_name):
 
 
 if __name__ == '__main__':
-    heu_name = 'def'
+    heu_name = 'res'
     # #p1
-    root_dir = 'D:/exp'
-    res_dir = 'D:/exp/per'
+    root_dir = 'C:/exp'
+    # res_dir = 'C:/exp'
     root_dir = os.path.join(root_dir, heu_name)
-    res_dir = os.path.join(res_dir, heu_name)
+    # res_dir = os.path.join(res_dir, "per")
     time_limit = 899.99
 
-    printme(root_dir, res_dir)
+    # printme(root_dir, res_dir)
 
     # p2
-    solve_time_list = list()
-    sample = "D:\exp\def\AllInterval_DEFAULT_2021-01-15_18_27_57.csv"
-
-    data = pd.read_csv(sample)
-    title_list = data.columns.values.tolist()
-    print(title_list)
-    print(len(title_list))
+    solve_time_list = ["time.6"]
+    # solve_time_list.append()
+    # sample = R"C:\exp\res\AllInterval_DOMWDEG_2021-07-05_13_19_377.csv"
     #
-    result = pd.DataFrame(columns=title_list)
-    # solve time list
-    for c in title_list:
-        if c.startswith('time'):
-            solve_time_list.append(c)
+    # data = pd.read_csv(sample)
+    # title_list = data.columns.values.tolist()
+    # print(title_list)
+    # print(len(title_list))
+    # #
+    # result = pd.DataFrame(columns=title_list)
+    # # solve time list
+    # for c in title_list:
+    #     if c.startswith('time'):
+    #         solve_time_list.append(c)
 
     print(solve_time_list)
 
-    removeTimeOut(root_dir, res_dir, time_limit, solve_time_list)
+    summary_files = sorted(os.listdir(root_dir))
 
-    # p3
-    # root_dir = R"D:\exp\per\def"
-    # res_dir = R"D:\exp\5p\def"
-    root_dir = 'D:/exp'
-    res_dir = 'D:/exp/5p'
-    root_dir = os.path.join(root_dir, heu_name)
-    res_dir = os.path.join(res_dir, heu_name)
-    # 去掉不用的列
-    reduce_table(root_dir, res_dir)
-    # # 算百分比
-    # calculate_percentage(root_dir, res_dir)
+    for name in summary_files:
+        path = os.path.join(root_dir, name)
+        series_name = name.split('_')[0]
+        # res_path = os.path.join(root_dir, name)
+        print(path)
+        data = pd.read_csv(path)
+        data = data.dropna(axis=0, how='any')
+        c1 = data[solve_time_list[0]] >= time_limit
+        # c2 = data[solve_time_list[1]] >= time_limit
 
-    root_dir = 'D:/exp/5p'
-    res_dir = 'D:/exp/5p'
-
-    # 统计再算平均值
-    phase_mean(root_dir, res_dir, heu_name)
+        data.drop(data[c1].index, inplace=True)
+        # print(data)
+        data = data[['numNone.6', 'numSkip.6', 'numP1.6', 'numP1AndP2.6', 'numP2.6']]
+        data.columns = ['numNone', 'numSkip', 'numP1', 'numP1AndP2', 'numP2']
+        data['numP1'] = data['numP1'] - data['numP1AndP2']
+        data['numP2'] = data['numP2'] - data['numP1AndP2']
+        # print(data)
+        data = data.div(data.sum(axis=1), axis=0)
+        # print(data)
+        print(data.mean())
+        # data.to_csv(res_path, index=0)
+    #
+    # # p3
+    # # root_dir = R"C:\exp\per\def"
+    # # res_dir = R"C:\exp\5p\def"
+    # root_dir = 'C:/exp'
+    # res_dir = 'C:/exp/5p'
+    # root_dir = os.path.join(root_dir, heu_name)
+    # res_dir = os.path.join(res_dir, heu_name)
+    # # 去掉不用的列
+    # reduce_table(root_dir, res_dir)
+    # # # 算百分比
+    # # calculate_percentage(root_dir, res_dir)
+    #
+    # root_dir = 'C:/exp/5p'
+    # res_dir = 'C:/exp/5p'
+    #
+    # # 统计再算平均值
+    # phase_mean(root_dir, res_dir, heu_name)
